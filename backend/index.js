@@ -10,36 +10,45 @@ import cors from 'cors'
 const app = express()
 const PORT = process.env.PORT || 3000
 
-//middleware
+// middleware
 app.use(express.json())
 app.use(cookieParser())
-// app.use(cors({
-//     origin:'https://localhost:5173',
-//     credentials:true
-// }))
-// app.use(cors({
-//   // origin: ["http://localhost:5173"],
-//    origin: [process.env.FRONTEND_URL, "http://localhost:5173"],
-//   credentials: true
-// }));
+
+// Allowed Origins
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:5173"
-].filter(Boolean);
+].filter(Boolean)
 
+// CORS Setup (production safe)
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
   credentials: true
-}));
-console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+}))
+
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL)
 
 
+// routes
 app.use('/api/auth', authRoute)
 app.use('/api/website', websiteRoute)
 app.use('/api/payment', paymentRoute)
 
 
-app.listen(PORT, ()=>{
-    connectDB()
-    console.log(`Server is listening at port : ${PORT}` )
+// root route
+app.get("/", (req, res) => {
+  res.send("Buildora AI Backend is Running ")
+})
+
+
+// server
+app.listen(PORT, () => {
+  connectDB()
+  console.log(`Server is listening at port : ${PORT}`)
 })
