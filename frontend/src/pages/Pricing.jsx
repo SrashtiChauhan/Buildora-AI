@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '../redux/userSlice'
+import API_URL from "../config";
 
 
 
@@ -165,7 +166,8 @@ const handlePayment = async (plan) => {
         const amount = plan.id === "enterprise" ? 1499 : 499;
 
         const result = await axios.post(
-            `${import.meta.env.VITE_SERVER_URL}/api/payment/order`,
+            //`${import.meta.env.VITE_SERVER_URL}/api/payment/order`,
+            `${API_URL}/api/payment/order`,
             {
                 planId: plan.id,
                 amount,
@@ -184,7 +186,8 @@ const handlePayment = async (plan) => {
 
             handler: async function (response) {
                 const verify = await axios.post(
-                    `${import.meta.env.VITE_SERVER_URL}/api/payment/verify`,
+                    //`${import.meta.env.VITE_SERVER_URL}/api/payment/verify`,
+                    `${API_URL}/api/payment/verify`,
                     response,
                     { withCredentials: true }
                 );

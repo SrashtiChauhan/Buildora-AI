@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserData } from '../redux/userSlice'
+import API_URL from "../config"; 
 
 const PHASES = [
     "Analyzing your idea...",
@@ -32,11 +33,16 @@ const Generate = () => {
 
             setLoading(true)
 
+            // const res = await axios.post(
+            //     `${import.meta.env.VITE_SERVER_URL}/api/website/generate`,
+            //     { prompt },
+            //     { withCredentials: true }
+            // )
             const res = await axios.post(
-                `${import.meta.env.VITE_SERVER_URL}/api/website/generate`,
+                `${API_URL}/api/website/generate`,
                 { prompt },
                 { withCredentials: true }
-            )
+)
 
             setProgress(100)
             console.log(res)

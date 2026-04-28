@@ -5,6 +5,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Editor from '@monaco-editor/react';
 import emailjs from "@emailjs/browser";
+import API_URL from "../config";
+
 
 const WebsiteEditor = () => {
     const [website, setWebsite] = useState(null)
@@ -29,7 +31,10 @@ const WebsiteEditor = () => {
 
     const handleDeploy = async (id) => {
     try {
-         const result = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/deploy/${website._id}`,{withCredentials:true})
+         //const result = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/deploy/${website._id}`,{withCredentials:true})
+        const result = await axios.get(`${API_URL}/api/website/deploy/${website._id}`, {
+            withCredentials: true
+        });
          window.open(`${result.data.url}`,"_blank")
          
     } catch (error) {
@@ -48,7 +53,10 @@ const WebsiteEditor = () => {
         setMessages((m) => [...m, { role: "user", content: prompt }])
         setUpdateLoading(true)
         try {
-            const result = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/website/update/${id}`, { prompt }, { withCredentials: true })
+            //const result = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/website/update/${id}`, { prompt }, { withCredentials: true })
+            const result = await axios.get(`${API_URL}/api/website/deploy/${website._id}`, {
+               withCredentials: true
+            });
             setMessages((m) => [...m, { role: "ai", content: result.data.message }])
             setCode(result.data.code)
         } catch (error) {
@@ -61,7 +69,10 @@ const WebsiteEditor = () => {
     useEffect(() => {
         const handleGetWebsite = async () => {
             try {
-                const result = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/getbyid/${id}`, { withCredentials: true })
+                //const result = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/getbyid/${id}`, { withCredentials: true })
+                const result = await axios.get(`${API_URL}/api/website/getbyid/${id}`, {
+                    withCredentials: true
+                });
                 setWebsite(result.data)
                 setCode(result.data.latestCode)
                 setMessages(result.data.conversation)

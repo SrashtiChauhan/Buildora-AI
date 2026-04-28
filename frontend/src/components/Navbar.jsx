@@ -6,6 +6,7 @@ import { Coins } from "lucide-react"
 import axios from "axios"
 import { setUserData } from "../redux/userSlice"
 import { useNavigate } from "react-router-dom"
+import API_URL from "../config";
 
 const Navbar = () => {
 
@@ -20,7 +21,8 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await axios.get(
-        `${import.meta.env.VITE_SERVER_URL}/api/auth/logout`,
+       // `${import.meta.env.VITE_SERVER_URL}/api/auth/logout`,
+       `${API_URL}/api/auth/logout`,
         { withCredentials: true }
       )
 
