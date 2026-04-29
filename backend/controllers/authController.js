@@ -3,7 +3,20 @@ import jwt from 'jsonwebtoken'
 
 export const googleAuth = async (req, res) => {
     try {
-        const { name, email, avatar } = req.body
+        
+        const { name, email, avatar } = req.body;
+        
+
+        console.log("BODY:", req.body); 
+
+        //  safety check 
+        if (!email) {
+            return res.status(400).json({
+                success: false,
+                message: "Email missing from request"
+            });
+        }
+
         let user = await User.findOne({ email })
         if (!user) {
             user = await User.create({ name, email, avatar })
