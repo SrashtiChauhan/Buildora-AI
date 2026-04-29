@@ -9,10 +9,10 @@
 
 ---
 
-## 🌐 Live Demo
 
-🔗 **Frontend:** https://buildora-ai-five.vercel.app
-🔗 **Backend API:** https://buildora-ai.onrender.com
+
+**🌐 Live Demo** https://buildora-ai-five.vercel.app
+
 
 ---
 
@@ -33,7 +33,7 @@ It simulates a real-world production system with:
 
 Traditional website development requires time, technical expertise, and effort.
 
-👉 Buildora AI solves this by enabling users to **generate production-ready websites instantly using AI**, reducing development time from hours to seconds.
+Buildora AI solves this by enabling users to **generate production-ready websites instantly using AI**, reducing development time from hours to seconds.
 
 ---
 
@@ -49,19 +49,6 @@ Traditional website development requires time, technical expertise, and effort.
 
 ---
 
-## 🏗️ System Architecture
-
-![Image](https://images.openai.com/static-rsc-4/AiPsM6FaU0tUDYf5x4uL0lRPJ-lcmHqcV5iC5Su73PYlfbv64rTVrV6njeYVkD2JBXCHETGmOlvsBwzpAOrR3ty5itFMA-lSSkXqTwthOl8GWq7egriTPkaS5S8R1ivuqbn5olmpzTejfzUCMze2JxXcp6z6DxJsJwg-e7_9luTIyDVIcJyh1lQHWmRL41fx?purpose=fullsize)
-
-![Image](https://images.openai.com/static-rsc-4/P8yf9Zd3vVJvCNHhCi0qT4mbOV1Q-FnPcFbk2BJifcjIxly3zrn2bbvEhN2S8US6mcUUqqnGUEcphLjCJakvmWG5nU4gvswmIwMfcQHeYuO_LHw59N3DJcFGTQervJBS2AxsONgzfcfxNzrOtDW0HUntDg0Xg4El47JJbGTmZI4geCta-s6tDGDYDVKxm_0I?purpose=fullsize)
-
-![Image](https://images.openai.com/static-rsc-4/Bxf7wshpg7XLhJ1-zKIHNBRX6mbhn28I2DUBww-sfZU_sLSbiSpqPRoiTXtM8DGMomjg5Xp3zEF_CAa8WSes-29lBTA--3Moa78nBOB9KBjscwK_HBhMf0p_NHHgeKsACy-ycalDg0ayFr_eSJYXK41fDzNQaZBaiX-vzhX6e8UxwO-0y1mTlIZaymi87Cj5?purpose=fullsize)
-
-![Image](https://images.openai.com/static-rsc-4/TO_f-1loff39BiOK6WxpDFQ8wFeYWVwi_vxW84eHNe8rrkw2m_nped7zsaxy9WudzTeFcFuzI169yNWsE7peqidCM6c-UgdHsLRwL1x0wbRshexBzLCX8qXLKW8PBzQ6tprVsji3iTTQ41uBS0jGj82cgUNxtG36xQ9j4V1zD6PdPza_ZBSlE2lLcA8JzWWg?purpose=fullsize)
-
-![Image](https://images.openai.com/static-rsc-4/kk8s4-Lv1ptgcyNvxVaSLiQTigoREAWNmMSyFqJiY-HW5ISrpSSo1a3TYbYpDwvcRHIns2jkNCEFLCsyakpD_nrEBhw9x3yxMCIiINagyI3W42XSURT1expLFDSq7bEikfJsAvk2EDZa1oApfGUiCmBoUHTCIxkyUmWo92d7hCXO6Z8Wo267602SbHgzjCtQ?purpose=fullsize)
-
----
 
 ## 🔄 Application Flow
 
@@ -182,14 +169,16 @@ Buildora-AI/
 
 ## 📸 Screenshots
 
+### 🏠 Homepage
 ![Homepage](./screenshots/homepage.png)
 
-👉 Add more:
-
-```md
+### 📊 Dashboard
 ![Dashboard](./screenshots/dashboard.png)
+
+### 🌍 Generated Website Preview
 ![Preview](./screenshots/preview.png)
-```
+
+
 
 ---
 
@@ -290,12 +279,53 @@ OTP: 123456
 
 ---
 
-## 👩‍💻 Author
+## 🤝 Contributing
 
-**Srashti Chauhan**
-BTech CSE | Full Stack Developer
+Contributions are welcome! 🎉
+
+If you'd like to improve this project, feel free to:
+
+* ⭐ Star the repository
+* 🐛 Report bugs by opening an issue
+* 💡 Suggest new features or improvements
+* 🔧 Submit pull requests
+
+### 🛠 How to Contribute
+
+1. Fork the repository
+2. Create a new branch
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. Make your changes
+4. Commit your changes
+
+   ```bash
+   git commit -m "Added new feature"
+   ```
+5. Push to your branch
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+6. Open a Pull Request 🚀
 
 ---
+
+## 👩‍💻 Authors
+
+* **Srashti Chauhan** — https://github.com/SrashtiChauhan
+* **Arnav Pundir** —  https://github.com/ArnavPundir22
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
 
 ## ⭐ Show Your Support
 
@@ -307,6 +337,3 @@ If you like this project:
 
 ---
 
-<p align="center">
-  Made with ❤️ and AI
-</p>
