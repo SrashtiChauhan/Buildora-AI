@@ -320,13 +320,6 @@ If you'd like to improve this project, feel free to:
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-
 ## ⭐ Show Your Support
 
 If you like this project:
