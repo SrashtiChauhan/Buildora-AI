@@ -32,9 +32,6 @@ app.use(cors({
   credentials: true
 }))
 
-console.log("FRONTEND_URL:", process.env.FRONTEND_URL)
-
-
 // routes
 app.use('/api/auth', authRoute)
 app.use('/api/website', websiteRoute)
@@ -46,9 +43,17 @@ app.get("/", (req, res) => {
   res.send("Buildora AI Backend is Running ")
 })
 
+// global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal Server Error"
+  })
+})
 
 // server
-app.listen(PORT, () => {
-  connectDB()
+app.listen(PORT, async () => {
+  await connectDB()
   console.log(`Server is listening at port : ${PORT}`)
 })

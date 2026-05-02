@@ -7,8 +7,6 @@ import { useDispatch } from 'react-redux'
 import { setUserData } from '../redux/userSlice'
 import API_URL from "../config";
 
-
-
 const plans = [
     {
         id: "free",
@@ -61,168 +59,69 @@ const Pricing = () => {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(false);
 
-//     const handlePayment = async (plan) => {
-//         if (plan.id === "free") {
-//             navigate("/dashboard")
-//             return
-//         }
-//         try {  
-//             const amount = plan.id === "enterprise" ? 1499 : 499
-//             const result = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/payment/order`, {
-//                 planId: plan.id,
-//                 amount: amount,
-//                 credits: plan.credits
-//             }, { withCredentials: true })
-           
+    const handlePayment = async (plan) => {
+        if (loading) return;
+        setLoading(true);
 
-//             // const options = {
-//             //     key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-//             //     amount: result.data.amount,
-//             //     currency: 'INR',
-//             //     name: "Buildora AI",
-//             //     description: `${plan.name} - ${plan.credits} Credits`,
-//             //     order_id: result.data.id,
+        try {
+            if (plan.id === "free") {
+                navigate("/dashboard");
+                return;
+            }
 
-//             //     handler: async function (response) {
-//             //         console.log(response)
-//             //         const verify = await axios.post(
-//             //             `${import.meta.env.VITE_SERVER_URL}/api/payment/verify`,
-//             //             response,
-//             //             { withCredentials: true }
-//             //         )
+            const amount = plan.id === "enterprise" ? 1499 : 499;
 
-//             //         console.log(verify.data)
-//             //         dispatch(setUserData(verify.data.user))
+            const result = await axios.post(
+                `${API_URL}/api/payment/order`,
+                {
+                    planId: plan.id,
+                    amount,
+                    credits: plan.credits
+                },
+                { withCredentials: true }
+            );
 
-//             //     },
-//             //     theme: {
-//             //         color: "#19173d"
-//             //     }
-//             // }
-//             const options = {
-//     key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-//     amount: result.data.amount,
-//     currency: 'INR',
-//     name: "Buildora AI",
-//     description: `${plan.name} - ${plan.credits} Credits`,
-//     order_id: result.data.id,
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+                amount: result.data.amount,
+                currency: 'INR',
+                name: "Buildora AI",
+                description: `${plan.name} - ${plan.credits} Credits`,
+                order_id: result.data.id,
 
-//     handler: async function (response) {
-//         console.log(response)
-//         const verify = await axios.post(
-//             `${import.meta.env.VITE_SERVER_URL}/api/payment/verify`,
-//             response,
-//             { withCredentials: true }
-//         )
+                handler: async function (response) {
+                    const verify = await axios.post(
+                        `${API_URL}/api/payment/verify`,
+                        response,
+                        { withCredentials: true }
+                    );
+                    dispatch(setUserData(verify.data.user));
+                },
 
-//         console.log(verify.data)
-//         dispatch(setUserData(verify.data.user))
-//     },
+                theme: { color: "#19173d" },
 
-//     theme: {
-//         color: "#19173d"
-//     },
+                method: {
+                    card: true,
+                    upi: true,
+                    wallet: true,
+                    netbanking: true
+                },
+                notes: {
+                    planId: plan.id,
+                    credits: plan.credits
+                }
+            };
 
-    
-//     prefill: {
-//         name: "Test User",
-//         email: "test@example.com",
-//         contact: "9999999999"
-//     },
+            const rzp = new window.Razorpay(options);
+            rzp.open();
 
-
-//     method: {
-//         card: true,
-//         upi: true,
-//         wallet: true,
-//         netbanking: true
-//     },
-//     notes: {
-//         planId: plan.id,
-//         credits: plan.credits
-//     }
-// }
-
-
-
-//             const rzp = new window.Razorpay(options)
-//             rzp.open()
-//         } catch (error) {
-//             console.log(error)
-            
-//         }
-//     }
-
-const handlePayment = async (plan) => {
-    if (loading) return;  
-    setLoading(true);
-
-    try {
-        if (plan.id === "free") {
-            navigate("/dashboard");
-            return;
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
         }
+    };
 
-        const amount = plan.id === "enterprise" ? 1499 : 499;
-
-        const result = await axios.post(
-            //`${import.meta.env.VITE_SERVER_URL}/api/payment/order`,
-            `${API_URL}/api/payment/order`,
-            {
-                planId: plan.id,
-                amount,
-                credits: plan.credits
-            },
-            { withCredentials: true }
-        );
-
-        const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-            amount: result.data.amount,
-            currency: 'INR',
-            name: "Buildora AI",
-            description: `${plan.name} - ${plan.credits} Credits`,
-            order_id: result.data.id,
-
-            handler: async function (response) {
-                const verify = await axios.post(
-                    //`${import.meta.env.VITE_SERVER_URL}/api/payment/verify`,
-                    `${API_URL}/api/payment/verify`,
-                    response,
-                    { withCredentials: true }
-                );
-                dispatch(setUserData(verify.data.user));
-            },
-
-            theme: { color: "#19173d" },
-
-            prefill: {
-                name: "Test User",
-                email: "test@example.com",
-                contact: "9999999999"
-            },
-
-            method: {
-                card: true,
-                upi: true,
-                wallet: true,
-                netbanking: true
-            },
-            notes: {
-  planId: plan.id,
-  credits: plan.credits
-}
-        };
-
-        const rzp = new window.Razorpay(options);
-        rzp.open();
-
-    } catch (error) {
-        console.log(error);
-    } finally {
-        setLoading(false);
-    }
-};
     return (
         <div className='relative min-h-screen overflow-hidden bg-[#050505] text-white px-6 pt-16 pb-24'>
             <div className='absolute inset-0 pointer-events-none'>
@@ -246,8 +145,8 @@ const handlePayment = async (plan) => {
                 {plans.map((p, i) => (
                     <motion.div
                         key={i}
-                        initial={{ oapcity: 0, y: 40 }}
-                        whileInView={{ oapcity: 1, y: 0 }}
+                        initial={{ opacity: 0, y: 40 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.12 }}
                         whileHover={{ y: -14, scale: 1.03 }}
                         className={`relative rounded-3xl p-8 border backdrop-blur-xl transition-all 
@@ -274,11 +173,11 @@ const handlePayment = async (plan) => {
                             ))}
                         </ul>
                         <motion.button
-                            // onClick={() => handlePayment(p)}
                             onClick={(e) => {
                                 e.preventDefault();
                                 handlePayment(p);
                             }}
+                            disabled={loading}
                             whileTap={{ scale: 0.96 }}
                             className={`w-full py-3 rounded-xl font-semibold transition ${p.popular ? "bg-indigo-500 hover:bg-indigo-600" :
                                 "bg-white/10 hover:bg-white/20"} disabled:opacity-60`}

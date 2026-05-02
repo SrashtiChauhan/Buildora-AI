@@ -166,19 +166,15 @@ export const generateWebsite = async (req, res) => {
       return res.status(400).json({ message: "You have not enough credits to generate a website" })
     }
 
-    const finalPrompt = masterPrompt.replace("USER_PROMPT", prompt)
+    const finalPrompt = masterPrompt.replace("{USER_PROMPT}", prompt)
     let raw = ""
     let parsed = null
-    for (let i = 0; i < 2 && !parsed; i++) {
-      raw = await generateResponse(finalPrompt)
+    for (let attempt = 0; attempt < 3 && !parsed; attempt++) {
+      const retryPrompt = attempt === 0 ? finalPrompt : finalPrompt + "\n\nRETURN ONLY RAW JSON"
+      raw = await generateResponse(retryPrompt)
       parsed = await extractJson(raw)
-
-      if (!parsed) {
-        raw = await generateResponse(finalPrompt + "\n\nRETURN ONLY RAW JSON")
-        parsed = await extractJson(raw)
-      }
     }
-    if (!parsed.code) {
+    if (!parsed || !parsed.code) {
       return res.status(400).json({ message: "AI returned invalid response" })
     }
     const website = await Website.create({
@@ -208,7 +204,7 @@ export const getWebsiteById = async (req, res) => {
       user: req.user._id
     })
     if (!website) {
-      return res.status(400).json({ message: "Website not found" })
+      return res.status(404).json({ message: "Website not found" })
     }
     return res.status(200).json(website)
   } catch (error) {
@@ -227,7 +223,7 @@ export const changeWebsite = async (req, res) => {
       user: req.user._id
     })
     if (!website) {
-      return res.status(400).json({ message: "Website not found" })
+      return res.status(404).json({ message: "Website not found" })
     }
     const user = await User.findById(req.user._id)
     if (!user) {
@@ -256,22 +252,18 @@ export const changeWebsite = async (req, res) => {
 
     let raw = ""
     let parsed = null
-    for (let i = 0; i < 2 && !parsed; i++) {
-      raw = await generateResponse(udpatePrompt)
+    for (let attempt = 0; attempt < 3 && !parsed; attempt++) {
+      const retryPrompt = attempt === 0 ? udpatePrompt : udpatePrompt + "\n\nRETURN ONLY RAW JSON"
+      raw = await generateResponse(retryPrompt)
       parsed = await extractJson(raw)
-
-      if (!parsed) {
-        raw = await generateResponse(udpatePrompt + "\n\nRETURN ONLY RAW JSON")
-        parsed = await extractJson(raw)
-      }
     }
-    if (!parsed.code) {
+    if (!parsed || !parsed.code) {
       return res.status(400).json({ message: "AI returned invalid response" })
     }
 
     website.conversation.push(
-      { role: "ai", content: parsed.message },
       { role: "user", content: prompt },
+      { role: "ai", content: parsed.message },
     )
 
     website.latestCode = parsed.code
@@ -305,7 +297,7 @@ export const deployWebsite = async (req, res) => {
     })
 
     if (!website) {
-      return res.status(400).json({ message: "Website not found" })
+      return res.status(404).json({ message: "Website not found" })
     }
     if (!website.slug) {
       website.slug = website.title.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0, 60) + website._id.toString().slice(-5)
@@ -329,7 +321,7 @@ export const getBySlug = async (req, res) => {
       slug: req.params.slug
     })
     if (!website) {
-      return res.status(400).json({ message: "Website not found" })
+      return res.status(404).json({ message: "Website not found" })
     }
     return res.status(200).json(website)
   } catch (error) {

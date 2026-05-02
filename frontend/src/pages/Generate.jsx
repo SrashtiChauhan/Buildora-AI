@@ -33,16 +33,11 @@ const Generate = () => {
 
             setLoading(true)
 
-            // const res = await axios.post(
-            //     `${import.meta.env.VITE_SERVER_URL}/api/website/generate`,
-            //     { prompt },
-            //     { withCredentials: true }
-            // )
             const res = await axios.post(
                 `${API_URL}/api/website/generate`,
                 { prompt },
                 { withCredentials: true }
-)
+            )
 
             setProgress(100)
             console.log(res)
