@@ -11,7 +11,11 @@ const extractJson = async (text) => {
         const closeBracket = cleaned.lastIndexOf('}')
         if(openBracket === -1 || closeBracket === -1) return null
         const jsonString = cleaned.slice(openBracket, closeBracket+1)
-        return JSON.parse(jsonString)
+        try {
+            return JSON.parse(jsonString)
+        } catch {
+            return null
+        }
 }
 
 export default extractJson

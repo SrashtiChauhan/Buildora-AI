@@ -21,7 +21,6 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await axios.get(
-       // `${import.meta.env.VITE_SERVER_URL}/api/auth/logout`,
        `${API_URL}/api/auth/logout`,
         { withCredentials: true }
       )
@@ -49,7 +48,7 @@ const Navbar = () => {
             onClick={() => navigate("/")}
             className="flex items-center gap-2 cursor-pointer bg-white/5 p-2 px-4 rounded-2xl border border-zinc-600"
           >
-            <img src="/ai2.png" className="w-7" />
+            <img src="/ai2.png" alt="Buildora AI logo" className="w-7" />
 
             <span className="font-semibold text-lg bg-linear-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
               Buildora AI

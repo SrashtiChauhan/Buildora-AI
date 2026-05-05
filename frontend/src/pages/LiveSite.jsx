@@ -6,22 +6,21 @@ import API_URL from "../config";
 const LiveSite = () => {
     const [html, setHtml] = useState("")
     const [error, setError] = useState("")
-    const {id} = useParams()
+    const {slug} = useParams()
     useEffect(()=>{
           const handleGetWebsite = async()=>{
             try {
-                //const res = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/getbyslug/${id}`,{withCredentials:true})  
-                const res = await axios.get(`${API_URL}/api/website/getbyslug/${id}`, {
+                const res = await axios.get(`${API_URL}/api/website/getbyslug/${slug}`, {
                   withCredentials: true    
                 });  
                 setHtml(res.data.latestCode)          
             } catch (error) {
                 console.log(error)
-                setError(error.response.data.message)
+                setError(error.response?.data?.message || "Website not found")
             }
           }
           handleGetWebsite()
-    },[])
+    },[slug])
 
     if (error) {
   return (

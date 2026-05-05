@@ -13,7 +13,6 @@ const LoginModal = ({ open, onClose }) => {
     const handleGoogleAuth = async () => {
         try {
             const result = await signInWithPopup(auth, provider)
-            //const { data } = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/auth/google`, {
             const { data } = await axios.post(`${API_URL}/api/auth/google`, {
                 name: result.user.displayName,
                 email: result.user.email,

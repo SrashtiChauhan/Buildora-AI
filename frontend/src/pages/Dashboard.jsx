@@ -1,7 +1,7 @@
 import { ArrowLeft, Check, Rocket, Share2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { motion } from 'motion/react'
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import API_URL from "../config";
@@ -16,7 +16,6 @@ function Dashboard() {
 
   const handleDeploy = async (id) => {
     try {
-         //const result = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/deploy/${id}`,{withCredentials:true})
          const result = await axios.get(`${API_URL}/api/website/deploy/${id}`, {
   withCredentials: true
 });
@@ -27,22 +26,6 @@ function Dashboard() {
     }
   }
 
-  // useEffect(() => {
-  //   const handleGetAllWebsite = async () => {
-  //     try {
-  //       setLoading(true)
-  //       //const result = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/getall`, { withCredentials: true })
-  //       axios.get(`${API_URL}/api/website/getall`, { withCredentials: true })
-  //       setWebsites(result.data)
-  //     } catch (error) {
-  //       setError(error.response.data.message)
-  //       console.log(error)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //   handleGetAllWebsite()
-  // }, [])
   useEffect(() => {
   const handleGetAllWebsite = async () => {
     try {

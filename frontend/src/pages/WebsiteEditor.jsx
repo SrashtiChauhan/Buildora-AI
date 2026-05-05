@@ -4,9 +4,16 @@ import { AnimatePresence, motion } from 'motion/react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Editor from '@monaco-editor/react';
-import emailjs from "@emailjs/browser";
 import API_URL from "../config";
 
+function EditorHeader({ title, onClose }) {
+    return (
+        <div className='h-14 px-4 flex items-center justify-between border-b border-white/10'>
+            <span className='font-semibold truncate'>{title}</span>
+            <button onClick={onClose} className='lg:hidden'><X/></button>
+        </div>
+    )
+}
 
 const WebsiteEditor = () => {
     const [website, setWebsite] = useState(null)
@@ -29,9 +36,9 @@ const WebsiteEditor = () => {
         "Finalizing Update..."
     ]
 
-    const handleDeploy = async (id) => {
+    const handleDeploy = async () => {
+    if (!website) return
     try {
-         //const result = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/deploy/${website._id}`,{withCredentials:true})
         const result = await axios.get(`${API_URL}/api/website/deploy/${website._id}`, {
             withCredentials: true
         });
@@ -50,13 +57,17 @@ const WebsiteEditor = () => {
     }, [updateLoading])
 
     const handleUpdate = async () => {
-        setMessages((m) => [...m, { role: "user", content: prompt }])
+        const currentPrompt = prompt.trim()
+        if (!currentPrompt) return
+        setMessages((m) => [...m, { role: "user", content: currentPrompt }])
+        setPrompt("")
         setUpdateLoading(true)
         try {
-            //const result = await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/website/update/${id}`, { prompt }, { withCredentials: true })
-            const result = await axios.get(`${API_URL}/api/website/deploy/${website._id}`, {
-               withCredentials: true
-            });
+            const result = await axios.post(
+                `${API_URL}/api/website/update/${id}`,
+                { prompt: currentPrompt },
+                { withCredentials: true }
+            )
             setMessages((m) => [...m, { role: "ai", content: result.data.message }])
             setCode(result.data.code)
         } catch (error) {
@@ -69,7 +80,6 @@ const WebsiteEditor = () => {
     useEffect(() => {
         const handleGetWebsite = async () => {
             try {
-                //const result = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/website/getbyid/${id}`, { withCredentials: true })
                 const result = await axios.get(`${API_URL}/api/website/getbyid/${id}`, {
                     withCredentials: true
                 });
@@ -77,60 +87,15 @@ const WebsiteEditor = () => {
                 setCode(result.data.latestCode)
                 setMessages(result.data.conversation)
             } catch (error) {
-                setError(error.response.data.message)
+                setError(error.response?.data?.message || "Something went wrong")
                 console.log(error)
             }
         }
         handleGetWebsite()
     }, [id])
 
-
-
-    //1st change
-    // useEffect(() => {
-    //     if (!iframeRef.current || !code) return;
-    //     const blob = new Blob([code], { type: "text/html" })
-    //     const url = URL.createObjectURL(blob)
-    //     iframeRef.current.src = url
-    //     return () => URL.revokeObjectURL(url)
-    // }, [code])
-
-
     useEffect(() => {
     if (!iframeRef.current || !code) return;
-
-    //  Inject EmailJS into generated HTML
-
-    //after giving keys above 2nd change here
-
-    // const modifiedCode = `
-    // ${code}
-
-    // //after giving keys above 2nd change here
-    // <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    // <script>
-    // (function(){
-    //     emailjs.init("F6znsg3Je2iQm-_nt");
-
-    //     document.addEventListener("submit", function(e){
-    //         if(e.target.tagName === "FORM"){
-    //             e.preventDefault();
-
-    //             emailjs.sendForm(
-    //                 "service_2yxw85f",
-    //                 "template_wdof03b",
-    //                 e.target,
-    //                 F6znsg3Je2iQm-_nt
-    //             ).then(function(){
-    //                 console.log("Message sent");
-    //             }, function(error){
-    //                 console.log(error);
-    //             });
-    //         }
-    //     });
-    // })();
-    // </script>
-    // `;
 
     const modifiedCode = `
 ${code}
@@ -158,10 +123,6 @@ document.addEventListener("submit", function(e){
 </script>
 `;
 
-
-
-
-
     const blob = new Blob([modifiedCode], { type: "text/html" });
     const url = URL.createObjectURL(blob);
     iframeRef.current.src = url;
@@ -179,10 +140,11 @@ document.addEventListener("submit", function(e){
             <div className='h-screen flex items-center justify-center bg-black text-white'>Loading...</div>
         )
     }
+
     return (
         <div className='h-screen w-screen flex bg-black text-white overflow-hidden'>
             <aside className='hidden lg:flex w-95 flex-col border-r border-white/10 bg-black/80'>
-                <Header />
+                <EditorHeader title={website.title} onClose={() => setShowChat(false)} />
                 <>
                     <div className='flex-1 overflow-y-auto px-4 py-4 space-y-4'>
                         {messages.map((m, i) => {
@@ -231,7 +193,7 @@ document.addEventListener("submit", function(e){
                 <iframe ref={iframeRef} className='flex-1 w-full bg-white' sandbox='allow-scripts allow-same-origin allow-forms'/>
             </div>
 
-            {/* mobile chat preview */}
+            {/* mobile chat panel */}
             <AnimatePresence>
                 {showChat && (
                     <motion.div
@@ -240,7 +202,7 @@ document.addEventListener("submit", function(e){
                         exit={{ y: "100%" }}
                         className='fixed inset-0 z-9999 flex flex-col bg-black'
                     >
-                        <Header />
+                        <EditorHeader title={website.title} onClose={() => setShowChat(false)} />
                         <>
                             <div className='flex-1 overflow-y-auto px-4 py-4 space-y-4'>
                                 {messages.map((m, i) => {
@@ -293,32 +255,17 @@ document.addEventListener("submit", function(e){
             <AnimatePresence>
                 {showFullPreview && (
                     <motion.div className='fixed inset-0 bg-black z-9999'>
-
-                        //3rd change
-                        {/* <iframe className='w-full h-full bg-white' srcDoc={code} sandbox='allow-scripts allow-same-origin allow-forms'></iframe> */}
-
                         <iframe 
-  className='w-full h-full bg-white' 
-  srcDoc={code} 
-  sandbox='allow-scripts allow-same-origin allow-forms allow-modals'
-/>
+                          className='w-full h-full bg-white' 
+                          srcDoc={code} 
+                          sandbox='allow-scripts allow-same-origin allow-forms allow-modals'
+                        />
                         <button onClick={() => setShowFullPreview(false)} className='absolute top-4 right-4 p-2 bg-black/70 rounded-lg'><X /></button>
                     </motion.div>
                 )}
             </AnimatePresence>
         </div>
     )
-
-    function Header() {
-        return (
-            <div className='h-14 px-4 flex items-center justify-between border-b border-white/10'>
-                <span className='font-semibold truncate'>{website.title}</span>
-                <button onClick={()=>setShowChat(false)} className='lg:hidden'><X/></button>
-            </div>
-        )
-    }
-
-
 }
 
 export default WebsiteEditor

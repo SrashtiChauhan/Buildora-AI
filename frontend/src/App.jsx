@@ -7,7 +7,6 @@ import WebsiteEditor from './pages/WebsiteEditor'
 import LiveSite from './pages/LiveSite'
 import Pricing from './pages/Pricing'
 import { useSelector } from 'react-redux'
-import WebsiteViewer from "./pages/WebsiteViewer";
 
 const App = () => {
   const { userData } = useSelector(state => state.user)
@@ -20,9 +19,8 @@ const App = () => {
           <Route path='/dashboard' element={userData ? <Dashboard /> : <Home />} />
           <Route path='/generate' element={userData ? <Generate /> : <Home />} />
           <Route path='/editor/:id' element={userData ? <WebsiteEditor /> : <Home />} />
-          <Route path='/site/:id' element={<LiveSite />} />
+          <Route path='/site/:slug' element={<LiveSite />} />
           <Route path='/pricing' element={<Pricing />} />
-          <Route path="/site/:slug" element={<WebsiteViewer />} />
         </Routes>
       </Layout>
     </BrowserRouter>

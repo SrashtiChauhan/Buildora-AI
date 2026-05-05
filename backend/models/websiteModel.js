@@ -23,7 +23,7 @@ const websiteSchema = new mongoose.Schema({
     },
     latestCode: {
         type: String,
-        requried: true
+        required: true
     },
     conversation: [messageSchema],
     deployed: { type: Boolean, default: false },
